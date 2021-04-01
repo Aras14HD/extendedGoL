@@ -12,8 +12,8 @@
 }
 .cell {
   border: 0px solid;
-  height: 40px;
-  width: 40px;
+  height: 16px;
+  width: 16px;
 }
 body {
   display: flex;
