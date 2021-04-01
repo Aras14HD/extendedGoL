@@ -76,7 +76,8 @@ async function toggleCell(cell) {
 }
 async function run() {
   if (!pause) {
-    _cells = "{ cells: " + cells + " }";
+    _cells = { cells: cells };
+    _cells = JSON.stringify(_cells);
     worker.postMessage([_cells, columns, rows]);
     worker.onmessage = function (tcells) {
       cells = tcells;
