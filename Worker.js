@@ -1,5 +1,5 @@
 onmessage = function (e) {
-  cells = e.data[0];
+  cells = JSON.parse(e.data[0]).cells;
   columns = e.data[1];
   rows = e.data[2];
 

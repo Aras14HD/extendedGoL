@@ -75,7 +75,7 @@ async function toggleCell(cell) {
 }
 async function run() {
   if (!pause) {
-    _cells = "" + cells;
+    _cells = { cells: cells } + "";
     worker = new Worker("Worker.js");
     worker.postMessage([_cells, columns, rows]);
     worker.onmessage = function (tcells) {
