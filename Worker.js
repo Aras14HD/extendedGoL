@@ -66,5 +66,5 @@ onmessage = function (e) {
       if (tcells[column][row] > 1) tcells[column][row] = 1;
     }
   }
-  postMessage(tcells);
+  postMessage(JSON.stringify({ tcells: tcells }));
 };

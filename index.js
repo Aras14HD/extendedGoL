@@ -79,8 +79,8 @@ async function run() {
     _cells = { cells: cells };
     _cells = JSON.stringify(_cells);
     worker.postMessage([_cells, columns, rows]);
-    worker.onmessage = function (tcells) {
-      cells = tcells;
+    worker.onmessage = function (e) {
+      cells = JSON.parse(e.data[0]).tcells;
       for (let column = 0; column < cells.length; column++) {
         for (let row = 0; row < cells[column].length; row++) {
           document.getElementById(
