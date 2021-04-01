@@ -12,6 +12,7 @@ for (let column = 0; column < columns; column++) {
 }
 console.log(cells);
 document.addEventListener("DOMContentLoaded", function () {
+  worker = new Worker("Worker.js");
   let html = "";
   for (let column = 0; column < columns; column++) {
     html += "<div class='column' id='column-" + column + "'>";
@@ -75,8 +76,7 @@ async function toggleCell(cell) {
 }
 async function run() {
   if (!pause) {
-    _cells = { cells: cells } + "";
-    worker = new Worker("Worker.js");
+    _cells = { cells: cells };
     worker.postMessage([_cells, columns, rows]);
     worker.onmessage = function (tcells) {
       cells = tcells;
