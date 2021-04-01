@@ -59,6 +59,7 @@ function initCells() {
     }
   }
   window.setInterval(run, speed);
+  window.setInterval(drawCells, speed);
 }
 function toggleCell(cell) {
   let column = cell.target.className.split(" ")[1].replace("column-", "");
@@ -140,11 +141,13 @@ function run() {
     }
 
     cells = tcells;
-    for (let column = 0; column < cells.length; column++) {
-      for (let row = 0; row < cells[column].length; row++) {
-        document.getElementById("cell-" + column + ":" + row).style.background =
-          "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
-      }
+  }
+}
+function drawCells() {
+  for (let column = 0; column < cells.length; column++) {
+    for (let row = 0; row < cells[column].length; row++) {
+      document.getElementById("cell-" + column + ":" + row).style.background =
+        "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
     }
   }
 }
