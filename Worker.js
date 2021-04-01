@@ -1,7 +1,7 @@
 onmessage = function (e) {
-  cells = JSON.parse(e.data[0]).cells;
-  columns = e.data[1];
-  rows = e.data[2];
+  let cells = JSON.parse(e.data[0]).cells;
+  let columns = e.data[1];
+  let rows = e.data[2];
 
   let tcells = [];
   for (let column = 0; column < cells.length; column++) {
