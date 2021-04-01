@@ -1,5 +1,5 @@
 onmessage = function (e) {
-  let cells = JSON.parse(e.data[0]).cells;
+  let cells = JSON.parse(e.data[0]);
   let columns = e.data[1];
   let rows = e.data[2];
 
@@ -66,5 +66,5 @@ onmessage = function (e) {
       if (tcells[column][row] > 1) tcells[column][row] = 1;
     }
   }
-  postMessage(JSON.stringify({ tcells: tcells }));
+  postMessage(JSON.stringify(tcells));
 };

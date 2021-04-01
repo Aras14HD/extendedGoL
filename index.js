@@ -76,11 +76,10 @@ async function toggleCell(cell) {
 }
 async function run() {
   if (!pause) {
-    _cells = { cells: cells };
-    _cells = JSON.stringify(_cells);
+    _cells = JSON.stringify(cells);
     worker.postMessage([_cells, columns, rows]);
     worker.onmessage = function (e) {
-      cells = JSON.parse(e.data[0]).tcells;
+      cells = JSON.parse(e.data[0]);
       for (let column = 0; column < cells.length; column++) {
         for (let row = 0; row < cells[column].length; row++) {
           document.getElementById(
