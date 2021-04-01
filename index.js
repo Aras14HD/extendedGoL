@@ -1,5 +1,5 @@
-let rows = 20;
-let columns = 20;
+let rows = 50;
+let columns = 50;
 let cells = [];
 let pause = true;
 let speed = 60;
