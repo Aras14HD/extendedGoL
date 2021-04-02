@@ -13,7 +13,6 @@ for (let column = 0; column < columns; column++) {
 }
 console.log(cells);
 document.addEventListener("DOMContentLoaded", function () {
-  worker = new Worker("Worker.js");
   let html = "";
   for (let column = 0; column < columns; column++) {
     html += "<div class='column' id='column-" + column + "'>";
@@ -90,12 +89,30 @@ function toggleCell(e) {
 }
 async function run() {
   if (!pause) {
-    _cells = JSON.stringify(cells);
-    worker.postMessage([_cells, columns, rows]);
-    worker.onmessage = function (e) {
-      cells = JSON.parse(e.data);
-      ms++;
-    };
+    let tcells = [];
+    let worker = [];
+    for (let column = 0; column < cells.length; column++) {
+      tcells.push([]);
+      worker.push([]);
+      for (let row = 0; row < cells[column].length; row++) {
+        worker[column][row] = new Worker("Worker.js");
+        _cells = JSON.stringify(cells);
+        worker[column][row].postMessage([_cells, column, row]);
+        worker[column][row].addEventListener("message", (e) => {
+          n = e.data[0];
+          column = e.data[1];
+          row = e.data[2];
+
+          if (cells[column][row] >= 0.5) {
+            tcells[column][row] = -0.5 * (n - 2.5) * (n - 2.5) + 1.125;
+          } else {
+            tcells[column][row] = -1 * (n - 3) * (n - 3) + 1;
+          }
+          if (tcells[column][row] < 0) tcells[column][row] = 0;
+          if (tcells[column][row] > 1) tcells[column][row] = 1;
+        });
+      }
+    }
   }
 }
 async function drawCells() {
