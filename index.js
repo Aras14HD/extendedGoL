@@ -87,7 +87,7 @@ function toggleCell(e) {
     800 / columns
   );
 }
-function run() {
+async function run() {
   if (!pause) {
     let tcells = [];
     for (let column = 0; column < cells.length; column++) {
