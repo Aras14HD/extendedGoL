@@ -94,6 +94,7 @@ async function run() {
     worker.postMessage([_cells, columns, rows]);
     worker.onmessage = function (e) {
       cells = JSON.parse(e.data);
+      ms++;
     };
   }
 }
