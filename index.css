@@ -10,11 +10,6 @@
   flex-direction: column;
   flex-wrap: nowrap;
 }
-.cell {
-  border: 0px solid;
-  height: 8px;
-  width: 8px;
-}
 body {
   display: flex;
   flex-direction: row;
