@@ -91,8 +91,7 @@ function toggleCell(e) {
 }
 async function run() {
   if (!pause) {
-    tcells = [];
-    worker = [];
+    let tcells = [];
     i = 0;
     for (let column = 0; column < cells.length; column++) {
       tcells.push([]);
@@ -102,9 +101,9 @@ async function run() {
         worker.postMessage([_cells, column, row]);
 
         worker.addEventListener("message", (e) => {
-          n = e.data[0];
-          column = e.data[1];
-          row = e.data[2];
+          let n = e.data[0];
+          let column = e.data[1];
+          let row = e.data[2];
           i++;
 
           if (cells[column][row] >= 0.5) {
