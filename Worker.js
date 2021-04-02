@@ -2,6 +2,8 @@ onmessage = function (e) {
   let cells = JSON.parse(e.data[0]);
   let column = e.data[1];
   let row = e.data[2];
+  let columns = cells.length;
+  let rows = cells[0].length;
 
   let n = 0.0;
   if (column > 0) {
