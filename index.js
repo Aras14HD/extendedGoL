@@ -5,8 +5,6 @@ let pause = true;
 let speed = 60;
 let x = 1;
 let ms = 0;
-let tcells = [];
-let worker = [];
 let i = 0;
 for (let column = 0; column < columns; column++) {
   cells.push([]);
@@ -16,6 +14,7 @@ for (let column = 0; column < columns; column++) {
 }
 console.log(cells);
 document.addEventListener("DOMContentLoaded", function () {
+  worker = new Worker("Worker.js");
   let html = "";
   for (let column = 0; column < columns; column++) {
     html += "<div class='column' id='column-" + column + "'>";
@@ -99,11 +98,10 @@ async function run() {
       tcells.push([]);
       worker.push([]);
       for (let row = 0; row < cells[column].length; row++) {
-        worker[column][row] = new Worker("Worker.js");
         _cells = JSON.stringify(cells);
-        worker[column][row].postMessage([_cells, column, row]);
+        worker.postMessage([_cells, column, row]);
 
-        worker[column][row].addEventListener("message", (e) => {
+        worker.addEventListener("message", (e) => {
           n = e.data[0];
           column = e.data[1];
           row = e.data[2];
