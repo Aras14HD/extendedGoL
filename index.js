@@ -1,4 +1,3 @@
-
 let rows = 200;
 let columns = 200;
 let cells = [];
@@ -99,12 +98,14 @@ async function run() {
   }
 }
 async function drawCells() {
-  for (let column = 0; column < cells.length; column++) {
-    for (let row = 0; row < cells[column].length; row++) {
-      document.getElementById("cell-" + column + ":" + row).style.background =
-        "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
+  if (!pause) {
+    for (let column = 0; column < cells.length; column++) {
+      for (let row = 0; row < cells[column].length; row++) {
+        document.getElementById("cell-" + column + ":" + row).style.background =
+          "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
+      }
+      console.log(ms);
+      ms = 0;
     }
-    console.log(ms);
-    ms = 0;
   }
 }
