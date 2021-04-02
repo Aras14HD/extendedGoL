@@ -5,6 +5,9 @@ let pause = true;
 let speed = 60;
 let x = 1;
 let ms = 0;
+let tcells = [];
+let worker = [];
+let i = 0;
 for (let column = 0; column < columns; column++) {
   cells.push([]);
   for (let row = 0; row < rows; row++) {
@@ -89,8 +92,9 @@ function toggleCell(e) {
 }
 async function run() {
   if (!pause) {
-    let tcells = [];
-    let worker = [];
+    tcells = [];
+    worker = [];
+    i = 0;
     for (let column = 0; column < cells.length; column++) {
       tcells.push([]);
       worker.push([]);
@@ -98,10 +102,12 @@ async function run() {
         worker[column][row] = new Worker("Worker.js");
         _cells = JSON.stringify(cells);
         worker[column][row].postMessage([_cells, column, row]);
+
         worker[column][row].addEventListener("message", (e) => {
           n = e.data[0];
           column = e.data[1];
           row = e.data[2];
+          i++;
 
           if (cells[column][row] >= 0.5) {
             tcells[column][row] = -0.5 * (n - 2.5) * (n - 2.5) + 1.125;
@@ -110,6 +116,11 @@ async function run() {
           }
           if (tcells[column][row] < 0) tcells[column][row] = 0;
           if (tcells[column][row] > 1) tcells[column][row] = 1;
+
+          worker[column][row].terminate();
+          if (i == cells.length * cells[0].length) {
+            cells = tcells;
+          }
         });
       }
     }
