@@ -157,7 +157,7 @@ function run() {
     ms++;
   }
 }
-function drawCells() {
+async function drawCells() {
   if (!pause) {
     let canvas = document.getElementById("container").getContext("2d");
     for (let column = 0; column < cells.length; column++) {
