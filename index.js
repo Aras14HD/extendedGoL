@@ -1,9 +1,11 @@
-let rows = 100;
-let columns = 100;
+
+let rows = 200;
+let columns = 200;
 let cells = [];
 let pause = true;
 let speed = 60;
 let x = 1;
+let ms = 0;
 for (let column = 0; column < columns; column++) {
   cells.push([]);
   for (let row = 0; row < rows; row++) {
@@ -39,6 +41,9 @@ document.addEventListener("DOMContentLoaded", function () {
   /*document.getElementById("speed").addEventListener("input", (e) => {
     speed = e.target.value;
   });*/
+  document
+    .getElementById("container")
+    .addEventListener("click", (e) => toggleCell(e));
   document.getElementById("x").addEventListener("input", (e) => {
     x = e.target.value;
   });
@@ -50,30 +55,39 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 function initCells() {
-  for (let column = 0; column < columns; column++) {
-    for (let row = 0; row < rows; row++) {
-      document
-        .getElementById("cell-" + column + ":" + row)
-        .addEventListener("click", (e) => {
-          toggleCell(e);
-        });
-    }
+  cellarray = document.getElementsByClassName("cell");
+  for (let i = 0; i < cellarray.length; i++) {
+    cell = cellarray[i];
+    cell.style.width = 800 / columns;
+    cell.style.height = 800 / rows;
   }
   window.setInterval(run, speed);
   window.setInterval(drawCells, speed);
 }
-async function toggleCell(cell) {
-  let column = cell.target.className.split(" ")[1].replace("column-", "");
-  let row = cell.target.className.split(" ")[2].replace("row-", "");
+function toggleCell(e) {
+  let canvas = document.getElementById("container").getContext("2d");
+  let xpos = e.layerX;
+  let ypos = e.layerY;
+  let column = Math.round(xpos / (800 / columns) - 800 / columns / 2) - 1;
+  let row = Math.round(ypos / (800 / rows) - 800 / rows / 2) - 1;
+  if (column > columns - 1) column = columns - 1;
+  if (column < 0) column = 0;
+  if (row > rows - 1) row = rows - 1;
+  if (row < 0) row = 0;
   switch (cells[column][row]) {
     case x:
-      cell.target.style.background = "hsl(0, 0%, 100%)";
       cells[column][row] = 0;
       break;
     default:
-      cell.target.style.background = "hsl(0, 0%, " + (-1 * x + 1) * 100 + "%)";
       cells[column][row] = x;
   }
+  canvas.fillStyle = "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
+  canvas.fillRect(
+    column * (800 / columns),
+    row * (800 / rows),
+    800 / columns,
+    800 / columns
+  );
 }
 async function run() {
   if (!pause) {
@@ -90,5 +104,7 @@ async function drawCells() {
       document.getElementById("cell-" + column + ":" + row).style.background =
         "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
     }
+    console.log(ms);
+    ms = 0;
   }
 }
