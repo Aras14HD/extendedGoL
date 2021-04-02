@@ -95,7 +95,6 @@ async function run() {
     i = 0;
     for (let column = 0; column < cells.length; column++) {
       tcells.push([]);
-      worker.push([]);
       for (let row = 0; row < cells[column].length; row++) {
         _cells = JSON.stringify(cells);
         worker.postMessage([_cells, column, row]);
