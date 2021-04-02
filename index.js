@@ -100,13 +100,20 @@ async function run() {
 }
 async function drawCells() {
   if (!pause) {
+    let canvas = document.getElementById("container").getContext("2d");
     for (let column = 0; column < cells.length; column++) {
       for (let row = 0; row < cells[column].length; row++) {
-        document.getElementById("cell-" + column + ":" + row).style.background =
+        canvas.fillStyle =
           "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
+        canvas.fillRect(
+          column * (800 / columns),
+          row * (800 / rows),
+          800 / columns,
+          800 / columns
+        );
       }
-      console.log(ms);
-      ms = 0;
     }
+    console.log(ms);
+    ms = 0;
   }
 }
