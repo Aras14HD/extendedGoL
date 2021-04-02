@@ -113,7 +113,6 @@ async function run() {
           if (tcells[column][row] < 0) tcells[column][row] = 0;
           if (tcells[column][row] > 1) tcells[column][row] = 1;
 
-          worker[column][row].terminate();
           if (i == cells.length * cells[0].length) {
             cells = tcells;
           }
