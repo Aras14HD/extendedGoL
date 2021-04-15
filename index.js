@@ -103,8 +103,12 @@ async function drawCells() {
     let canvas = document.getElementById("container").getContext("2d");
     for (let column = 0; column < cells.length; column++) {
       for (let row = 0; row < cells[column].length; row++) {
-        canvas.fillStyle =
-          "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
+        if (
+          canvas.fillStyle !=
+          "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)"
+        )
+          canvas.fillStyle =
+            "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
         canvas.fillRect(
           column * (800 / columns),
           row * (800 / rows),
