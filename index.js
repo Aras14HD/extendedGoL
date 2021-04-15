@@ -106,15 +106,16 @@ async function drawCells() {
         if (
           canvas.fillStyle !=
           "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)"
-        )
+        ) {
           canvas.fillStyle =
             "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
-        canvas.fillRect(
-          column * (800 / columns),
-          row * (800 / rows),
-          800 / columns,
-          800 / columns
-        );
+          canvas.fillRect(
+            column * (800 / columns),
+            row * (800 / rows),
+            800 / columns,
+            800 / columns
+          );
+        }
       }
     }
     console.log(ms);
