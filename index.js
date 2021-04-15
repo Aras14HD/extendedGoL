@@ -4,7 +4,6 @@ let cells = [];
 let pause = true;
 let speed = 60;
 let x = 1;
-let ms = 0;
 for (let column = 0; column < columns; column++) {
   cells.push([]);
   for (let row = 0; row < rows; row++) {
@@ -89,6 +88,7 @@ function toggleCell(e) {
 }
 async function run() {
   if (!pause) {
+    let y = [0, 0, 0, 0, 0];
     let tcells = [];
     for (let column = 0; column < cells.length; column++) {
       tcells.push([]);
@@ -145,16 +145,33 @@ async function run() {
 
         if (cells[column][row] >= 0.5) {
           tcells[column][row] = -0.5 * (n - 2.5) * (n - 2.5) + 1.125;
+          y[2] += n;
         } else {
           tcells[column][row] = -1 * (n - 3) * (n - 3) + 1;
+          y[3] += n;
         }
         if (tcells[column][row] < 0) tcells[column][row] = 0;
         if (tcells[column][row] > 1) tcells[column][row] = 1;
+        y[0] += parseFloat(tcells[column][row]);
+        y[1] += n;
+        if (
+          tcells[column][row] == cells[column][row] &&
+          cells[column][row] != 0
+        )
+          y[4]++;
       }
     }
-
+    /*console.debug(
+      y[0] / (columns * rows) +
+        "|" +
+        y[1] / (columns * rows) +
+        "|" +
+        y[2] / (columns * rows) +
+        "|" +
+        y[3] / (columns * rows)
+    );*/
+    //console.debug(y[4]);
     cells = tcells;
-    ms++;
   }
 }
 async function drawCells() {
@@ -162,17 +179,20 @@ async function drawCells() {
     let canvas = document.getElementById("container").getContext("2d");
     for (let column = 0; column < cells.length; column++) {
       for (let row = 0; row < cells[column].length; row++) {
-        canvas.fillStyle =
-          "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
-        canvas.fillRect(
-          column * (800 / columns),
-          row * (800 / rows),
-          800 / columns,
-          800 / columns
-        );
+        if (
+          canvas.fillStyle !=
+          "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)"
+        ) {
+          canvas.fillStyle =
+            "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
+          canvas.fillRect(
+            column * (800 / columns),
+            row * (800 / rows),
+            800 / columns,
+            800 / columns
+          );
+        }
       }
     }
-    console.log(ms);
-    ms = 0;
   }
 }
