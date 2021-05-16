@@ -67,10 +67,10 @@ function initCells() {
 }
 function toggleCell(e) {
   let canvas = document.getElementById("container").getContext("2d");
-  let xpos = e.layerX;
-  let ypos = e.layerY;
-  let column = Math.round(xpos / (800 / columns) - 800 / columns / 2) - 1;
-  let row = Math.round(ypos / (800 / rows) - 800 / rows / 2) - 1;
+  let pos = getMousePos(document.getElementById("container"), e);
+  let column = Math.round(pos.x / (800 / columns)) - 1;
+  let row = Math.round(pos.y / (800 / rows)) - 1;
+
   if (column > columns - 1) column = columns - 1;
   if (column < 0) column = 0;
   if (row > rows - 1) row = rows - 1;
@@ -123,4 +123,11 @@ async function drawCells() {
     console.log(ms);
     ms = 0;
   }
+}
+function getMousePos(canvas, evt) {
+  var rect = canvas.getBoundingClientRect();
+  return {
+    x: evt.clientX - rect.left,
+    y: evt.clientY - rect.top,
+  };
 }
