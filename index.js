@@ -1,8 +1,10 @@
-let rows = 200;
-let columns = 200;
+const url = new URL(window.location.href);
+const rows = url.searchParams.get("w") || 200;
+const columns = url.searchParams.get("w") || 200;
+const speed = url.searchParams.get("s") || 60;
+
 let cells = [];
 let pause = true;
-let speed = 60;
 let x = 1;
 let ms = 0;
 for (let column = 0; column < columns; column++) {
