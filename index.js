@@ -18,20 +18,11 @@ document.addEventListener("DOMContentLoaded", function () {
   worker = new Worker("Worker.js");
   let html = "";
   for (let column = 0; column < columns; column++) {
-    html += "<div class='column' id='column-" + column + "'>";
+    html += `<div class="column" id="column-${column}">`;
     for (let row = 0; row < rows; row++) {
-      html +=
-        "<div class='cell column-" +
-        column +
-        " row-" +
-        row +
-        "' id='cell-" +
-        column +
-        ":" +
-        row +
-        "'></div>";
+      html += `<div class="cell column-${column} row-${row}" id="cell-${column}:${row}"></div>`;
     }
-    html += "</div>";
+    html += `</div>`;
   }
   document.getElementById("pause").addEventListener("click", () => {
     pause = !pause;
@@ -107,10 +98,11 @@ async function drawCells() {
       for (let row = 0; row < cells[column].length; row++) {
         if (
           canvas.fillStyle !=
-          "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)"
+          `hsl(0, 0%, ${(-1 * cells[column][row] + 1) * 100}%)`
         ) {
-          canvas.fillStyle =
-            "hsl(0, 0%, " + (-1 * cells[column][row] + 1) * 100 + "%)";
+          canvas.fillStyle = `hsl(0, 0%, ${
+            (-1 * cells[column][row] + 1) * 100
+          }%)`;
           canvas.fillRect(
             column * (800 / columns),
             row * (800 / rows),
