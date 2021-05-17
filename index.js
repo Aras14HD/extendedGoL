@@ -14,7 +14,7 @@ for (let column = 0; column < columns; column++) {
   }
 }
 console.log(cells);
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
   worker = new Worker("Worker.js");
   let html = "";
   for (let column = 0; column < columns; column++) {
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("pause").addEventListener("click", () => {
     pause = !pause;
   });
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", e => {
     if (e.key == " ") pause = !pause;
   });
   /*document.getElementById("speed").addEventListener("input", (e) => {
@@ -35,17 +35,18 @@ document.addEventListener("DOMContentLoaded", function () {
   });*/
   document
     .getElementById("container")
-    .addEventListener("click", (e) => toggleCell(e));
-  document.getElementById("x").addEventListener("input", (e) => {
+    .addEventListener("click", e => toggleCell(e));
+  document.getElementById("x").addEventListener("input", e => {
     x = e.target.value;
   });
-  new Promise((resolve) => {
+  new Promise(resolve => {
     document.getElementById("container").innerHTML = html;
     resolve(document.getElementById("container").innerHTML);
   }).then(() => {
     initCells();
   });
 });
+
 function initCells() {
   cellarray = document.getElementsByClassName("cell");
   for (let i = 0; i < cellarray.length; i++) {
@@ -56,6 +57,7 @@ function initCells() {
   window.setInterval(run, speed);
   window.setInterval(drawCells, speed);
 }
+
 function toggleCell(e) {
   let canvas = document.getElementById("container").getContext("2d");
   let pos = getMousePos(document.getElementById("container"), e);
@@ -85,7 +87,7 @@ async function run() {
   if (!pause) {
     _cells = JSON.stringify(cells);
     worker.postMessage([_cells, columns, rows]);
-    worker.onmessage = function (e) {
+    worker.onmessage = function(e) {
       cells = JSON.parse(e.data);
       ms++;
     };
@@ -100,9 +102,8 @@ async function drawCells() {
           canvas.fillStyle !=
           `hsl(0, 0%, ${(-1 * cells[column][row] + 1) * 100}%)`
         ) {
-          canvas.fillStyle = `hsl(0, 0%, ${
-            (-1 * cells[column][row] + 1) * 100
-          }%)`;
+          canvas.fillStyle = `hsl(0, 0%, ${(-1 * cells[column][row] + 1) *
+            100}%)`;
           canvas.fillRect(
             column * (800 / columns),
             row * (800 / rows),
@@ -116,10 +117,11 @@ async function drawCells() {
     ms = 0;
   }
 }
+
 function getMousePos(canvas, evt) {
   var rect = canvas.getBoundingClientRect();
   return {
     x: evt.clientX - rect.left,
-    y: evt.clientY - rect.top,
+    y: evt.clientY - rect.top
   };
 }
