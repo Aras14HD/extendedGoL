@@ -113,7 +113,7 @@ async function drawCells() {
         }
       }
     }
-    console.log(ms);
+    console.log("ms: " + ms);
     ms = 0;
   }
 }

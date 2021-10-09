@@ -1,12 +1,12 @@
-onmessage = function (e) {
+onmessage = function(e) {
   let cells = JSON.parse(e.data[0]);
   let columns = e.data[1];
   let rows = e.data[2];
 
-  let tcells = [];
-  for (let column = 0; column < cells.length; column++) {
-    tcells.push([]);
-    for (let row = 0; row < cells[column].length; row++) {
+  //Map
+  tcells = cells.map((col, column) =>
+    col.map((cell, row) => {
+      let tcell;
       let n = 0.0;
       for (let x = -1; x < 2; x++) {
         for (let y = -1; y < 2; y++) {
@@ -35,14 +35,16 @@ onmessage = function (e) {
         }
       }
 
-      if (cells[column][row] >= 0.5) {
-        tcells[column][row] = -0.5 * (n - 2.5) * (n - 2.5) + 1.125;
+      if (cell >= 0.5) {
+        tcell = -0.5 * (n - 2.5) * (n - 2.5) + 1.125;
       } else {
-        tcells[column][row] = -1 * (n - 3) * (n - 3) + 1;
+        tcell = -1 * (n - 3) * (n - 3) + 1;
       }
-      if (tcells[column][row] < 0) tcells[column][row] = 0;
-      if (tcells[column][row] > 1) tcells[column][row] = 1;
-    }
-  }
+      if (tcell < 0) tcell = 0;
+      if (tcell > 1) tcell = 1;
+      return tcell;
+    })
+  );
+
   postMessage(JSON.stringify(tcells));
 };
