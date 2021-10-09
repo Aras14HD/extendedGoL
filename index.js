@@ -13,7 +13,7 @@ for (let column = 0; column < columns; column++) {
   }
 }
 console.log(cells);
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
   let html = "";
   for (let column = 0; column < columns; column++) {
     html += `<div class="column" id="column-${column}">`;
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("pause").addEventListener("click", () => {
     pause = !pause;
   });
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", e => {
     if (e.key == " ") pause = !pause;
   });
   /*document.getElementById("speed").addEventListener("input", (e) => {
@@ -33,11 +33,11 @@ document.addEventListener("DOMContentLoaded", function () {
   });*/
   document
     .getElementById("container")
-    .addEventListener("click", (e) => toggleCell(e));
-  document.getElementById("x").addEventListener("input", (e) => {
+    .addEventListener("click", e => toggleCell(e));
+  document.getElementById("x").addEventListener("input", e => {
     x = e.target.value;
   });
-  new Promise((resolve) => {
+  new Promise(resolve => {
     document.getElementById("container").innerHTML = html;
     resolve(document.getElementById("container").innerHTML);
   }).then(() => {
@@ -85,13 +85,10 @@ function run() {
     //debug vars
     let y = [0, 0, 0, 0, 0];
 
-    let tcells = [];
-    for (let column = 0; column < cells.length; column++) {
-      tcells.push([]);
-      for (let row = 0; row < cells[column].length; row++) {
-        //sum of neighbors
+    cells = cells.map((col, column) =>
+      col.map((cell, row) => {
+        let tcell;
         let n = 0.0;
-
         for (let x = -1; x < 2; x++) {
           for (let y = -1; y < 2; y++) {
             if (x != 0 || y != 0) {
@@ -119,25 +116,19 @@ function run() {
           }
         }
 
-        if (cells[column][row] >= 0.5) {
-          tcells[column][row] = -0.5 * (n - 2.5) * (n - 2.5) + 1.125;
-          y[2] += n;
+        y[0] += n;
+        if (cell >= 0.5) {
+          tcell = -0.5 * (n - 2.5) * (n - 2.5) + 1.125;
         } else {
-          tcells[column][row] = -1 * (n - 3) * (n - 3) + 1;
-          y[3] += n;
+          tcell = -1 * (n - 3) * (n - 3) + 1;
         }
-        if (tcells[column][row] < 0) tcells[column][row] = 0;
-        if (tcells[column][row] > 1) tcells[column][row] = 1;
-        y[0] += parseFloat(tcells[column][row]);
-        y[1] += n;
-        if (
-          tcells[column][row] == cells[column][row] &&
-          cells[column][row] != 0
-        )
-          y[4]++;
-      }
-    }
-    /*console.debug(
+        if (tcell < 0) tcell = 0;
+        if (tcell > 1) tcell = 1;
+        y[1] += tcell;
+        return tcell;
+      })
+    );
+    console.debug(
       y[0] / (columns * rows) +
         "|" +
         y[1] / (columns * rows) +
@@ -145,9 +136,8 @@ function run() {
         y[2] / (columns * rows) +
         "|" +
         y[3] / (columns * rows)
-    );*/
+    );
     //console.debug(y[4]);
-    cells = tcells;
   }
 }
 function drawCells() {
@@ -159,9 +149,8 @@ function drawCells() {
           canvas.fillStyle !=
           `hsl(0, 0%, ${(-1 * cells[column][row] + 1) * 100}%)`
         ) {
-          canvas.fillStyle = `hsl(0, 0%, ${
-            (-1 * cells[column][row] + 1) * 100
-          }%)`;
+          canvas.fillStyle = `hsl(0, 0%, ${(-1 * cells[column][row] + 1) *
+            100}%)`;
           canvas.fillRect(
             column * (800 / columns),
             row * (800 / rows),
@@ -177,6 +166,6 @@ function getMousePos(canvas, evt) {
   var rect = canvas.getBoundingClientRect();
   return {
     x: evt.clientX - rect.left,
-    y: evt.clientY - rect.top,
+    y: evt.clientY - rect.top
   };
 }
