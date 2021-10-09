@@ -5,6 +5,8 @@ const speed = url.searchParams.get("s") || 60;
 
 let pause = true;
 let x = 1;
+let y = [0, 0, 0, 0, 0];
+let dataChart;
 let cells = [];
 for (let column = 0; column < columns; column++) {
   cells.push([]);
@@ -12,6 +14,7 @@ for (let column = 0; column < columns; column++) {
     cells[column][row] = 0;
   }
 }
+let generate = generate_field();
 console.log(cells);
 document.addEventListener("DOMContentLoaded", function() {
   let html = "";
@@ -28,6 +31,9 @@ document.addEventListener("DOMContentLoaded", function() {
   document.addEventListener("keydown", e => {
     if (e.key == " ") pause = !pause;
   });
+  document.getElementById("next").addEventListener("click", () => {
+    generate.next();
+  });
   /*document.getElementById("speed").addEventListener("input", (e) => {
     speed = e.target.value;
   });*/
@@ -37,6 +43,32 @@ document.addEventListener("DOMContentLoaded", function() {
   document.getElementById("x").addEventListener("input", e => {
     x = e.target.value;
   });
+  dataChart = new Chart(document.getElementById("Chart"), {
+    data: {
+      datasets: [
+        {
+          data: { x: 0, y: columns * rows },
+          label: "Number of cells with value",
+          type: "scatter"
+        }
+      ]
+    },
+    options: {
+      responsive: false,
+      animation: false,
+      scales: {
+        y: {
+          type: "logarithmic",
+          position: "left"
+        },
+        x: {
+          type: "linear",
+          position: "bottom"
+        }
+      }
+    }
+  });
+  dataChart.data.labels = [];
   new Promise(resolve => {
     document.getElementById("container").innerHTML = html;
     resolve(document.getElementById("container").innerHTML);
@@ -81,9 +113,13 @@ function toggleCell(e) {
   );
 }
 function run() {
-  if (!pause) {
+  if (!pause) return generate.next();
+}
+function* generate_field() {
+  while (true) {
     //debug vars
-    let y = [0, 0, 0, 0, 0];
+    y = [0, 0, 0, 0, 0];
+    y[4] = {};
 
     cells = cells.map((col, column) =>
       col.map((cell, row) => {
@@ -125,9 +161,18 @@ function run() {
         if (tcell < 0) tcell = 0;
         if (tcell > 1) tcell = 1;
         y[1] += tcell;
+        rounded_tcell = Math.round(tcell * 100) / 100;
+        if (y[4][rounded_tcell] == undefined) y[4][rounded_tcell] = 0;
+        y[4][rounded_tcell]++;
         return tcell;
       })
     );
+    dataChart.data.datasets[0].data = Object.entries(y[4]).map(
+      ([key, value]) => {
+        return { x: key, y: value };
+      }
+    );
+    dataChart.update();
     console.debug(
       y[0] / (columns * rows) +
         "|" +
@@ -137,31 +182,31 @@ function run() {
         "|" +
         y[3] / (columns * rows)
     );
-    //console.debug(y[4]);
+    console.debug(y[4]);
+    yield cells;
   }
 }
 function drawCells() {
-  if (!pause) {
-    let canvas = document.getElementById("container").getContext("2d");
-    for (let column = 0; column < cells.length; column++) {
-      for (let row = 0; row < cells[column].length; row++) {
-        if (
-          canvas.fillStyle !=
-          `hsl(0, 0%, ${(-1 * cells[column][row] + 1) * 100}%)`
-        ) {
-          canvas.fillStyle = `hsl(0, 0%, ${(-1 * cells[column][row] + 1) *
-            100}%)`;
-          canvas.fillRect(
-            column * (800 / columns),
-            row * (800 / rows),
-            800 / columns,
-            800 / columns
-          );
-        }
+  let canvas = document.getElementById("container").getContext("2d");
+  for (let column = 0; column < cells.length; column++) {
+    for (let row = 0; row < cells[column].length; row++) {
+      if (
+        canvas.fillStyle !=
+        `hsl(0, 0%, ${(-1 * cells[column][row] + 1) * 100}%)`
+      ) {
+        canvas.fillStyle = `hsl(0, 0%, ${(-1 * cells[column][row] + 1) *
+          100}%)`;
+        canvas.fillRect(
+          column * (800 / columns),
+          row * (800 / rows),
+          800 / columns,
+          800 / columns
+        );
       }
     }
   }
 }
+
 function getMousePos(canvas, evt) {
   var rect = canvas.getBoundingClientRect();
   return {
