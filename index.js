@@ -1,3 +1,10 @@
+import init from './pkg/GoLtest.js'
+const runWasm = async () => {
+  // Instantiate our wasm module
+  const wasm = await init();
+  wasm.greet();
+};
+
 const url = new URL(window.location.href);
 const rows = url.searchParams.get("w") || 200;
 const columns = url.searchParams.get("w") || 200;
