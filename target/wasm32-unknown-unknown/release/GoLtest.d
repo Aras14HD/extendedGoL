@@ -1,1 +1,1 @@
-/mnt/Data/Documents/develop/JS/GoLtest/target/wasm32-unknown-unknown/release/GoLtest.wasm: /mnt/Data/Documents/develop/JS/GoLtest/src/lib.rs /mnt/Data/Documents/develop/JS/GoLtest/src/utils.rs
+/home/jorim/Documents/develop/web/extendedGoL/target/wasm32-unknown-unknown/release/GoLtest.wasm: /home/jorim/Documents/develop/web/extendedGoL/src/lib.rs /home/jorim/Documents/develop/web/extendedGoL/src/utils.rs
