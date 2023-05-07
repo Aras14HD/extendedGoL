@@ -3,7 +3,7 @@ extern crate wasm_bindgen;
 
 mod utils;
 
-use js_sys::*;
+use utils::set_panic_hook;
 use wasm_bindgen::prelude::*;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
@@ -23,7 +23,8 @@ pub fn greet() {
 }
 
 #[wasm_bindgen]
-pub fn update(cells_in: &[f64], cols: usize) -> Box<[f64]> {
+pub fn update(cells_in: Box<[f64]>, cols: usize) -> Box<[f64]> {
+    set_panic_hook();
     let cells: Vec<Vec<f64>> = cells_in.to_vec().chunks(cols).map(|s| s.into()).collect();
 
     let mut column: usize = 0;
